@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 
-export default function List() {
-  const memos = JSON.parse(localStorage.getItem('memos') || '[]');
+export default function List({ memos }) {
   return (
     <>
       <div className="memo-list">

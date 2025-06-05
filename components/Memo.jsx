@@ -6,21 +6,30 @@ import Edit from './Edit';
 import { useState } from 'react';
 
 function Memo() {
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [memos, setMemos] = useState(
+    JSON.parse(localStorage.getItem('memos') || '[]'),
+  );
 
-  const handleSaved = () => {
-    setRefreshKey((prevKey) => prevKey + 1);
-  };
+  function handleMemoChange(memos) {
+    setMemos(memos);
+    localStorage.setItem('memos', JSON.stringify(memos));
+  }
 
   return (
     <>
       <Router>
-        <List key={refreshKey} />
+        <List memos={memos} />
         <Routes>
           <Route path="/" element={null} />
-          <Route path="/create" element={<Edit onSaved={handleSaved} />} />
-          <Route path="/:id" element={<View />} />
-          <Route path="/:id/edit" element={<Edit onSaved={handleSaved} />} />
+          <Route
+            path="/create"
+            element={<Edit handleMemoChange={handleMemoChange} memos={memos} />}
+          />
+          <Route path="/:id" element={<View memos={memos} />} />
+          <Route
+            path="/:id/edit"
+            element={<Edit handleMemoChange={handleMemoChange} memos={memos} />}
+          />
         </Routes>
       </Router>
     </>
