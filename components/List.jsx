@@ -1,12 +1,7 @@
 import { Link } from 'react-router-dom';
 
 export default function List() {
-  const memos = [];
-  for (let i = 0; i < localStorage.length; i++) {
-    const id = localStorage.key(i);
-    const value = localStorage.getItem(id);
-    memos.push({ id, ...JSON.parse(value) });
-  }
+  const memos = JSON.parse(localStorage.getItem('memos') || '[]');
   return (
     <>
       <div className="memo-list">
