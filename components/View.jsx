@@ -1,8 +1,7 @@
 import { Link, useParams } from 'react-router-dom';
 
-export default function View() {
+export default function View({ memos }) {
   const { id } = useParams();
-  const memos = JSON.parse(localStorage.getItem('memos') || '[]');
   const memo = memos.filter((memo) => memo.id === id)[0] || {
     title: 'Not Found',
     content: 'This memo does not exist.',

@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-export default function Edit({ onSaved }) {
+export default function Edit({ memos, handleMemoChange }) {
   const navigate = useNavigate();
   const { id } = useParams();
-  const memos = JSON.parse(localStorage.getItem('memos') || '[]');
   const memo = memos.filter((memo) => memo.id === id)[0] || {
     title: '',
     content: '',
@@ -18,9 +17,8 @@ export default function Edit({ onSaved }) {
       title: fromData.get('title'),
       content: fromData.get('content'),
     };
-    memos.push(memo);
-    localStorage.setItem('memos', JSON.stringify(memos));
-    onSaved();
+    const updatedMemos = memos.filter((m) => m.id !== memo.id);
+    handleMemoChange([...updatedMemos, memo]);
     navigate(`/${fromData.get('id')}`);
   }
 
