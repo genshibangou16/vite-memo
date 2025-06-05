@@ -4,7 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 export default function Edit({ onSaved }) {
   const navigate = useNavigate();
   const { id } = useParams();
-  const memo = JSON.parse(localStorage.getItem(id)) || {
+  const memos = JSON.parse(localStorage.getItem('memos') || '[]');
+  const memo = memos.filter((memo) => memo.id === id)[0] || {
     title: '',
     content: '',
   };
@@ -13,10 +14,12 @@ export default function Edit({ onSaved }) {
 
   function handleSubmit(fromData) {
     const memo = {
+      id: fromData.get('id'),
       title: fromData.get('title'),
       content: fromData.get('content'),
     };
-    localStorage.setItem(fromData.get('id'), JSON.stringify(memo));
+    memos.push(memo);
+    localStorage.setItem('memos', JSON.stringify(memos));
     onSaved();
     navigate(`/${fromData.get('id')}`);
   }
