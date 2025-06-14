@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useLogin } from '../hooks/useLogin';
 
 export default function Edit({ memos, handleMemoChange }) {
   const navigate = useNavigate();
@@ -10,6 +11,11 @@ export default function Edit({ memos, handleMemoChange }) {
   };
   const [title, setTitle] = useState(memo.title);
   const [content, setContent] = useState(memo.content);
+
+  const { isLoggedIn } = useLogin();
+  if (!isLoggedIn) {
+    return <div>Please log in to create or edit memos.</div>;
+  }
 
   function handleSubmit(fromData) {
     const memo = {

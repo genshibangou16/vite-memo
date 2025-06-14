@@ -1,4 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
+import { useLogin } from '../hooks/useLogin';
 
 export default function View({ memos }) {
   const { id } = useParams();
@@ -7,11 +8,17 @@ export default function View({ memos }) {
     content: 'This memo does not exist.',
   };
 
-  function handleDelete() {
+  function handleDelete(isLoggedIn) {
+    if (!isLoggedIn) {
+      alert('Please log in to delete memos.');
+      return;
+    }
     const updatedMemos = memos.filter((memo) => memo.id !== id);
     localStorage.setItem('memos', JSON.stringify(updatedMemos));
     window.location.href = '/';
   }
+
+  const { isLoggedIn } = useLogin();
 
   return (
     <div>
@@ -19,7 +26,13 @@ export default function View({ memos }) {
       <p>{memo.content}</p>
       <div className="nav">
         <Link to={`/${id}/edit`}>Edit</Link>
-        <button onClick={handleDelete}>Delete</button>
+        <button
+          onClick={() => {
+            handleDelete(isLoggedIn);
+          }}
+        >
+          Delete
+        </button>
       </div>
     </div>
   );
